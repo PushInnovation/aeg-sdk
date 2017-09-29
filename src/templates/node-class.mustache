@@ -1,0 +1,63 @@
+/*jshint -W069 */
+/* AUTO GENERATED DO NOT EDIT */
+/**
+ * {{&description}}
+ * @class {{&className}}
+ * @param {(string|object)} [domainOrOptions] - The project domain or options object. If object, see the object's optional properties.
+ * @param {string} [domainOrOptions.domain] - The project domain
+ * @param {object} [domainOrOptions.token] - auth token - object with value property and optional headerOrQueryName and isQuery properties
+ */
+var {{&className}} = (function(){
+    'use strict';
+
+    var request = require('request');
+    var Q = require('q');
+    var config = require('config');
+    var _ = require('lodash');
+
+    function {{&className}}(options){
+
+        var identifier = _.camelCase('{{&className}}');
+
+        if (config.has('aeg-sdk') && config.get('aeg-sdk')[identifier]) {
+
+            this.domain = config.get('aeg-sdk')[identifier].host;
+
+        } else {
+
+            throw new Error('Domain parameter must be specified as a string.');
+
+        }
+
+        request = (typeof options === 'object') ? (options.request ? options.request : request) : request;
+
+        {{#isSecure}}
+            this.token = (typeof options === 'object') ? (options.token ? options.token : {}) : {};
+        {{/isSecure}}
+    }
+
+    {{#isSecure}}
+        /**
+         * Set Token
+         * @method
+         * @name {{&className}}#setToken
+         * @param {string} value - token's value
+         * @param {string} [prefix] - the token header prefix (Basic, Bearer)
+         *
+         */
+        {{&className}}.prototype.setToken = function (value, prefix) {
+            this.token.value = value;
+            this.token.headerOrQueryName = null;
+            this.token.isQuery = false;
+            this.token.prefix = prefix;
+        };
+    {{/isSecure}}
+
+    {{#methods}}
+        {{> method}}
+    {{/methods}}
+
+    return {{&className}};
+})();
+
+exports.{{&className}} = {{&className}};
