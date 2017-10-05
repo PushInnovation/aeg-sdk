@@ -8,6 +8,7 @@ import Promise from 'bluebird';
 const request = Promise.promisify(req);
 const securityServiceConfig = config.get('aeg-sdk').securityService;
 const affiliateServiceConfig = config.get('aeg-sdk').affiliateService;
+const fulfillmentServiceConfig = config.get('aeg-sdk').fulfillmentService;
 
 let argv = require('yargs')
 	.usage('Usage: {0} <command> [options]')
@@ -23,6 +24,7 @@ let argv = require('yargs')
 	})
 	.example('swaggerCodeGen -s security')
 	.example('swaggerCodeGen -s affiliate')
+	.example('swaggerCodeGen -s fulfillment')
 	.demand(1)
 	.argv;
 
@@ -53,6 +55,10 @@ async function runCommand (command) {
 		} else if (service === 'affiliate') {
 
 			await generate('AffiliateService', 'affiliate-service.js', affiliateServiceConfig.swagger);
+
+		} else if (service === 'fulfillment') {
+
+			await generate('FulfillmentService', 'fulfillment-service.js', fulfillmentServiceConfig.swagger);
 
 		}
 
